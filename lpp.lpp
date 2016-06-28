@@ -1,0 +1,10 @@
+%{
+#include "hpp.hpp"
+%}
+%option noyywrap
+%option yylineno
+%%
+[=:+\-*/$()@]		TOC(Sym,SYM)
+&&					TOC(Sym,SYM)
+[a-zA-Z0-9_.]+		TOC(Sym,SYM)
+%%
