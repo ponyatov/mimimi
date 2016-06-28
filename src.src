@@ -1,11 +1,17 @@
 
-touch | [ src.src log.log ypp.ypp lpp.lpp hpp.hpp cpp.cpp Makefile ]
+Makefile = [
+log.log : [ src.src ./exe.exe ] >>   
+	'./exe.exe < $< > $@ && tail $(TAIL) $@'
+] 
 
 .end
 
-Makefile = [ 
-log.log: src.src ./exe.exe
-	./exe.exe < $< > $@ && tail $(TAIL) $@
+touch | [ src.src log.log ypp.ypp lpp.lpp hpp.hpp cpp.cpp Makefile .gitignore ]
+
+.gitignore = [ '*~' '*swp' exe.exe log.log 'ypp.tab.?pp' lex.yy.c ]
+
+.end
+
 C = cpp.cpp ypp.tab.cpp lex.yy.c
 H = hpp.hpp ypp.tab.hpp
 CXXFLAGS += -std=gnu++11
@@ -15,13 +21,3 @@ ypp.tab.cpp: ypp.ypp
 	bison $<
 lex.yy.c: lpp.lpp
 	flex $<
-]
-
-.gitignore = [
-*~
-*swp
-exe.exe
-log.log
-ypp.tab.?pp
-lex.yy.c
-]

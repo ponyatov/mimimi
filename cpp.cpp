@@ -13,8 +13,28 @@ string Sym::dump(int depth) { string S = "\n"+pad(depth)+head();
 		S += (*it)->dump(depth+1);
 	return S; }
 
+Sym* Sym::eval() {
+	for (auto it=nest.begin(),e=nest.end();it!=e;it++)
+		(*it) = (*it)->eval();
+	return this; }
+
+Sym* Sym::div(Sym*o) {
+	if (val==".") return new Sym(val+"/"+o->val);
+	return new Error(val+"/"+o->val);
+}
+
+Error::Error(string V):Sym(V) { yyerror(V); }
+
 Vector::Vector():Sym("[]"){}
-string Vector::head() { return "[]"; }
+string Vector::head() { return val; }
 
 Op::Op(string V):Sym(V){}
 string Op::head() { return val; }
+Sym* Op::eval() {
+	if (val=="~") return nest[0]; else Sym::eval();
+	if (val=="/") return nest[0]->div(nest[1]);
+	return this;
+}
+
+Dep::Dep(Sym*A,Sym*B,Sym*C):Sym("dep") { push(A); push(B); push(C); }
+string Dep::head() { return ":"; }

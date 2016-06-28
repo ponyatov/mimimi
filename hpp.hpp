@@ -13,11 +13,17 @@ struct Sym {
 	Sym(string);
 	vector<Sym*> nest; void push(Sym*);
 	virtual string dump(int=0); virtual string head(); string pad(int);
+	virtual Sym* eval();
+	virtual Sym* div(Sym*);
 };
+
+struct Error: Sym { Error(string); };
 
 struct Vector: Sym { Vector(); string head(); };
 
-struct Op: Sym { Op(string); string head(); };
+struct Op: Sym { Op(string); string head(); Sym*eval(); };
+
+struct Dep: Sym { Dep(Sym*,Sym*,Sym*); string head(); };
 
 extern int yylex();
 extern int yylineno;
