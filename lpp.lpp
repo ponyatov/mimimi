@@ -4,7 +4,12 @@
 %option noyywrap
 %option yylineno
 %%
-[=:+\-*/$()@]		TOC(Sym,SYM)
-&&					TOC(Sym,SYM)
+#[^\n]*\n			{}
+^\.end				{yyterminate();}
+\[					TOC(Op,LQ)
+\]					TOC(Op,RQ)
+[=@~:+\-*/$()<>|]	TOC(Op,OP)
+&&					TOC(Op,SYM)
 [a-zA-Z0-9_.]+		TOC(Sym,SYM)
+[ \t\r\n]+			{}
 %%

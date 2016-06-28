@@ -3,6 +3,17 @@
 %}
 %defines %union { Sym*o; }
 %token <o> SYM
+%token <o> LP RP LQ RQ
+%token <o> OP
+%type <o> ex scalar vector
 %%
-REPL : | REPL SYM { cout << $2->dump(); } ;
+REPL : | REPL ex { cout << $2->dump(); } ;
+scalar : SYM ;
+ex : scalar
+	| LQ vector RQ	{ $$=$2; }
+	| ex OP ex		{ $$=$2; $$->push($1); $$->push($3); }
+;
+vector :			{ $$=new Vector(); }
+	| vector ex		{ $$=$1; $$->push($2); }
+;
 %%

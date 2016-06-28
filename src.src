@@ -1,5 +1,9 @@
-touch src.src log.log ypp.ypp lpp.lpp hpp.hpp cpp.cpp Makefile
 
+touch | [ src.src log.log ypp.ypp lpp.lpp hpp.hpp cpp.cpp Makefile ]
+
+.end
+
+Makefile = [ 
 log.log: src.src ./exe.exe
 	./exe.exe < $< > $@ && tail $(TAIL) $@
 C = cpp.cpp ypp.tab.cpp lex.yy.c
@@ -11,3 +15,13 @@ ypp.tab.cpp: ypp.ypp
 	bison $<
 lex.yy.c: lpp.lpp
 	flex $<
+]
+
+.gitignore = [
+*~
+*swp
+exe.exe
+log.log
+ypp.tab.?pp
+lex.yy.c
+]

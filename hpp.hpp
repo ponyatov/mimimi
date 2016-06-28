@@ -2,7 +2,7 @@
 #define _H_HPP
 
 #include <iostream>
-#include <sstream>
+//#include <sstream>
 #include <cstdlib>
 #include <vector>
 #include <map>
@@ -11,8 +11,13 @@ using namespace std;
 struct Sym {
 	string val;
 	Sym(string);
-	virtual string dump();
+	vector<Sym*> nest; void push(Sym*);
+	virtual string dump(int=0); virtual string head(); string pad(int);
 };
+
+struct Vector: Sym { Vector(); string head(); };
+
+struct Op: Sym { Op(string); string head(); };
 
 extern int yylex();
 extern int yylineno;
